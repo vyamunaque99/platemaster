@@ -1,0 +1,28 @@
+services:
+ db:
+   image: postgres:15
+   environment:
+     POSTGRES_DB: ${DATABASE_NAME}
+     POSTGRES_USER: ${DATABASE_USERNAME}
+     POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+   ports:
+     - "5432:5432"
+   volumes:
+     - postgres_data:/var/lib/postgresql/data
+   env_file:
+     - .env
+ platemaster-webapp:
+   image: platemaster-webapp:latest
+   build: .
+   container_name: platemaster-webapp
+   ports:
+     - "8000:8000"
+   depends_on:
+     - db
+   environment:
+     DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+     DATABASE_HOST: ${DATABASE_HOST}
+   env_file:
+     - .env
+volumes:
+   postgres_data:
