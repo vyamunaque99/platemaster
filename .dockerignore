@@ -21,12 +21,6 @@ db.sqlite3-journal
 media/
 staticfiles/
 
-# Docker
-.dockerignore
-Dockerfile
-docker-compose.yml
-compose.yaml
-
 # OS/IDE
 .DS_Store
 .vscode/
