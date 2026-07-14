@@ -8,12 +8,7 @@
     {% load static %}
     <script src="{% static 'js/tailwind.js' %}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/data-entry-vehiculo.css' %}">
 </head>
 
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -34,10 +29,28 @@
             <p class="text-sm text-gray-500">Sube la imagen en formato PNG del vehículo para procesarla e ingresar los
                 datos.</p>
         </div>
-
+        {% if state %}
+        <div
+            class="mb-6 p-4 rounded-xl border flex items-center gap-3 transition-all
+                {% if state == 'success' %}bg-green-50 border-green-200 text-green-700{% else %}bg-red-50 border-red-200 text-red-700{% endif %}">
+            {% if state == 'success' %}
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            {% else %}
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            {% endif %}
+            <p class="font-medium text-sm">{{ text }}</p>
+        </div>
+        {% endif %}
         <form method="POST" enctype="multipart/form-data" class="space-y-6">
             {% csrf_token %}
-
             <div class="flex items-center justify-center w-full">
                 <label for="de_image"
                     class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-xl cursor-pointer bg-slate-50 border-slate-300 hover:bg-blue-50 hover:border-blue-500 transition-colors group">
@@ -67,73 +80,7 @@
         </form>
     </div>
 
-    <script>
-        // Script para mostrar el nombre del archivo seleccionado y una previsualización de éxito
-        const fileInput = document.getElementById('de_image');
-        const labelContainer = document.querySelector('label[for="de_image"]');
-        const textContainer = labelContainer.querySelector('div.flex-col');
-
-        // Guardar el contenido original para restaurarlo si el usuario cancela
-        const originalContent = textContainer.innerHTML;
-
-        fileInput.addEventListener('change', function (e) {
-            const file = e.target.files[0];
-            if (file) {
-                textContainer.innerHTML = `
-                    <div class="flex flex-col items-center justify-center p-4">
-                        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-3">
-                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <p class="text-sm font-semibold text-slate-800 text-center truncate w-full max-w-[200px]">${file.name}</p>
-                        <p class="text-xs text-slate-500 mt-1">Listo para procesar</p>
-                    </div>
-                `;
-                labelContainer.classList.add('border-green-400', 'bg-green-50');
-                labelContainer.classList.remove('border-slate-300', 'bg-slate-50', 'hover:border-blue-500');
-            } else {
-                textContainer.innerHTML = originalContent;
-                labelContainer.classList.remove('border-green-400', 'bg-green-50');
-                labelContainer.classList.add('border-slate-300', 'bg-slate-50', 'hover:border-blue-500');
-            }
-        });
-
-        // Manejo básico de drag & drop visual
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            labelContainer.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            labelContainer.addEventListener(eventName, highlight, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            labelContainer.addEventListener(eventName, unhighlight, false);
-        });
-
-        function highlight(e) {
-            labelContainer.classList.add('border-blue-500', 'bg-blue-50');
-        }
-
-        function unhighlight(e) {
-            labelContainer.classList.remove('border-blue-500', 'bg-blue-50');
-        }
-
-        labelContainer.addEventListener('drop', handleDrop, false);
-        function handleDrop(e) {
-            let dt = e.dataTransfer;
-            let files = dt.files;
-            fileInput.files = files;
-            // Desencadenar manualmente el evento change
-            fileInput.dispatchEvent(new Event('change'));
-        }
-    </script>
+    <script src="{% static 'js/data-entry-vehiculo.js' %}"></script>
 </body>
 
 </html>

@@ -18,6 +18,7 @@ def extraer_texto_imagen(imagen):
     image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
 
     # 2. Escalar la imagen (Mejora clave)
+    image = image[160:,:]
     image = cv2.resize(image, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
 
     # 3. Convertir a escala de grises
@@ -32,5 +33,6 @@ def extraer_texto_imagen(imagen):
     # 6. Operación morfológica para hacer los caracteres más nítidos/sólidos
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2,2))
     thresh = cv2.erode(thresh, kernel, iterations=1) 
-    data = pytesseract.image_to_string(thresh, lang='spa')
+    data = pytesseract.image_to_string(thresh, lang='spa',config='--psm 6')
+
     return data

@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'platemaster.wsgi.app'
 DATABASES = {
     "default": dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default="postgresql://postgres:postgres@{0}:5432/rephub".format(os.getenv("DATABASE_HOST")),
+        default="postgresql://postgres:postgres@{0}:5432/platemaster".format(os.getenv("DATABASE_HOST")),
         conn_max_age=600,
     )
 }
@@ -136,5 +136,3 @@ STATIC_DIRS = [os.path.join(BASE_DIR, "main/static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_URL")]
