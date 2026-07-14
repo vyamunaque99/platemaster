@@ -1,5 +1,5 @@
 # Stage 1: Base Python build stage
-FROM python:3.10.12-slim AS python-builder
+FROM python:3.10.12-slim AS builder
  
 # Create the app directory
 RUN mkdir /app
@@ -27,9 +27,9 @@ RUN useradd -m -r appuser && \
    mkdir /app && \
    chown -R appuser /app
  
-# Copy the Python dependencies from the python-builder stage
-COPY --from=python-builder /usr/local/lib/python3.10/site-packages/ /usr/local/lib/python3.10/site-packages/
-COPY --from=python-builder /usr/local/bin/ /usr/local/bin/
+# Copy the Python dependencies from the builder stage
+COPY --from=builder /usr/local/lib/python3.10/site-packages/ /usr/local/lib/python3.10/site-packages/
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
 # Install tesseract OCR
 RUN apt-get update && apt-get install -y tesseract-ocr tesseract-ocr-spa
